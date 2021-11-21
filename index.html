@@ -165,7 +165,7 @@
 
                         <p id="description0">Leading scientist absq has discovered the cure for cancer after years of research - the cure has been priced at £0.10.</p>
 
-                        <a href = "#">Read More <span>>></span></a>
+                        <a id="href0" href = "#">Read More <span>>></span></a>
                     </div>
                 </article>
 
@@ -176,7 +176,7 @@
 
                         <p id="description1">Many schools in England have had to pause their learning after an anonymous hacker managed to take down WiFi signals for multiple hours.</p>
 
-                        <a href = "#">Read More <span>>></span></a>
+                        <a id="href1" href = "#">Read More <span>>></span></a>
                     </div>
                 </article>
 
@@ -187,7 +187,7 @@
 
                         <p id="description2">Tesla drivers say they have been locked out of their cars after an outage struck the carmaker's app.</p>
 
-                        <a href = "#">Read More <span>>></span></a>
+                        <a id="href2" href = "#">Read More <span>>></span></a>
                     </div>
                 </article>
 
@@ -198,7 +198,7 @@
 
                         <p id="description3">Alibaba shares have slumped by more than 10% in Hong Kong trade after the Chinese online retail giant warned of a slowdown in consumer spending.</p>
 
-                        <a href = "#">Read More <span>>></span></a>
+                        <a id="href3" href = "#">Read More <span>>></span></a>
                     </div>
                 </article>
 
@@ -209,7 +209,7 @@
 
                         <p id="description4">The long waited for movie, looking into the OppChingas life of success has finally been released on FalconNet.</p>
 
-                        <a href = "#">Read More <span>>></span></a>
+                        <a id="href4" href = "#">Read More <span>>></span></a>
                     </div>
                 </article>
             </section>
@@ -242,14 +242,20 @@
 
    document.getElementById("article0").innerHTML = x.data[x.data.length - 1].data.titlereal
    document.getElementById("description0").innerHTML = x.data[x.data.length - 1].data.contents.split("linebreak")[0]
+   document.getElementById("href0").href = "https://falcon-news.netlify.app/article?" +  x.data[x.data.length - 1].data.title
    document.getElementById("article1").innerHTML = x.data[x.data.length - 2].data.titlereal
    document.getElementById("description1").innerHTML = x.data[x.data.length - 2].data.contents.split("linebreak")[0]
+   document.getElementById("href1").href = "https://falcon-news.netlify.app/article?" +  x.data[x.data.length - 2].data.title
    document.getElementById("article2").innerHTML = x.data[x.data.length - 3].data.titlereal
    document.getElementById("description2").innerHTML = x.data[x.data.length - 3].data.contents.split("linebreak")[0]
+   document.getElementById("href2").href = "https://falcon-news.netlify.app/article?" +  x.data[x.data.length - 3].data.title
    document.getElementById("article3").innerHTML = x.data[x.data.length - 4].data.titlereal
    document.getElementById("description3").innerHTML = x.data[x.data.length - 4].data.contents.split("linebreak")[0]
+   document.getElementById("href3").href = "https://falcon-news.netlify.app/article?" +  x.data[x.data.length - 4].data.title
    document.getElementById("article4").innerHTML = x.data[x.data.length - 5].data.titlereal
    document.getElementById("description4").innerHTML = x.data[x.data.length - 5].data.contents.split("linebreak")[0]
+   document.getElementById("href4").href = "https://falcon-news.netlify.app/article?" +  x.data[x.data.length - 5].data.title
+
   
 
                                    
