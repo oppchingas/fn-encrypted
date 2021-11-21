@@ -13,6 +13,7 @@
         <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
         <!-- fontawesome -->
         <script src="https://kit.fontawesome.com/dbed6b6114.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/faunadb@latest/dist/faunadb.js"></script>
 
     <style>
 
@@ -49,7 +50,7 @@
 </style> 
 </head>
 
-    <body>
+    <body onload="getrecentnews()">
 
         <!-- header -->
         <header>
@@ -160,9 +161,9 @@
                 <article>
                     <h4>TODAY</h4>
                     <div>
-                        <h2>Cure for cancer discovered by absq</h2>
+                        <h2 id="article0">Cure for cancer discovered by absq</h2>
 
-                        <p>Leading scientist absq has discovered the cure for cancer after years of research - the cure has been priced at £0.10.</p>
+                        <p id="description0">Leading scientist absq has discovered the cure for cancer after years of research - the cure has been priced at £0.10.</p>
 
                         <a href = "#">Read More <span>>></span></a>
                     </div>
@@ -171,9 +172,9 @@
                 <article>
                     <h4>TODAY</h4>
                     <div>
-                        <h2>Anonymous hacker disrupts schools in England</h2>
+                        <h2 id="article1">Anonymous hacker disrupts schools in England</h2>
 
-                        <p>Many schools in England have had to pause their learning after an anonymous hacker managed to take down WiFi signals for multiple hours.</p>
+                        <p id="description1">Many schools in England have had to pause their learning after an anonymous hacker managed to take down WiFi signals for multiple hours.</p>
 
                         <a href = "#">Read More <span>>></span></a>
                     </div>
@@ -182,9 +183,9 @@
                 <article>
                     <h4>YESTERDAY</h4>
                     <div>
-                        <h2>Tesla drivers left stranded after outage</h2>
+                        <h2 id="article2">Tesla drivers left stranded after outage</h2>
 
-                        <p>Tesla drivers say they have been locked out of their cars after an outage struck the carmaker's app.</p>
+                        <p id="description2">Tesla drivers say they have been locked out of their cars after an outage struck the carmaker's app.</p>
 
                         <a href = "#">Read More <span>>></span></a>
                     </div>
@@ -193,9 +194,9 @@
                 <article>
                     <h4>3 DAYS AGO</h4>
                     <div>
-                        <h2>Alibaba shares drop drastically</h2>
+                        <h2 id="article3">Alibaba shares drop drastically</h2>
 
-                        <p>Alibaba shares have slumped by more than 10% in Hong Kong trade after the Chinese online retail giant warned of a slowdown in consumer spending.</p>
+                        <p id="description3">Alibaba shares have slumped by more than 10% in Hong Kong trade after the Chinese online retail giant warned of a slowdown in consumer spending.</p>
 
                         <a href = "#">Read More <span>>></span></a>
                     </div>
@@ -204,9 +205,9 @@
                 <article>
                     <h4>5 DAYS AGO</h4>
                     <div>
-                        <h2>FalconNet release OppChingas: The Story</h2>
+                        <h2 id="article4">FalconNet release OppChingas: The Story</h2>
 
-                        <p>The long waited for movie, looking into the OppChingas life of success has finally been released on FalconNet.</p>
+                        <p id="description4">The long waited for movie, looking into the OppChingas life of success has finally been released on FalconNet.</p>
 
                         <a href = "#">Read More <span>>></span></a>
                     </div>
@@ -222,5 +223,31 @@
         </footer>
 
         <script src="script.js" async defer></script>
+        <script>
+            var faunadb = window.faunadb
+  var q = faunadb.query
+  var client = new faunadb.Client({
+    secret: 'fnAEYeffB0AAyNqhrMHuazXpA_qOwFc5nMAZ7U53',
+    domain: 'db.eu.fauna.com',
+    scheme: 'https',
+  })
+            function getrecentnews(){
+
+    
+                client.query(
+   q.Map(
+  q.Paginate(q.Documents(q.Collection('falcon-posts'))),
+  q.Lambda(x => q.Get(x))
+)).then (function(x){
+
+   document.getElementById("article0").innerHTML = x.data[x.data.length - 1].data.titlereal
+  
+
+                                   
+      })
+
+
+            }
+        </script>
     </body>
 </html>
