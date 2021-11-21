@@ -1,0 +1,174 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/faunadb@latest/dist/faunadb.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Red+Hat+Text" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css?family=Bebas+Neue" rel="stylesheet">
+    <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Text Uploader</title>
+</head>
+<style>
+
+  
+      @font-face {
+  font-family: 'Red Hat Text';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/redhattext/v6/RrQCbohi_ic6B3yVSzGBrMx6ZI_cy1A6Ok2ML7hwZr_QcLVF.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/bebasneue/v2/JTUSjIg69CK48gW7PXoo9Wdhyzbi.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+body {
+  font-family: "Red Hat Text";
+  font-weight: 400;
+  line-height: 1.6;
+  background-color: rgba(17,17,17,.04);
+  color: black;
+}
+
+h1 {
+  font-family: "Red Hat Text";
+  font-size: calc(1.60181rem + .67889 * ((100vw - 20rem)/ 113));
+  font-weight: 400;
+  letter-spacing: 0.02rem;
+  line-height: 1.2;
+}
+
+img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+main {
+ 
+  max-width: 1000px;
+  padding: 3rem 0 4rem;
+  margin: 2rem auto;
+
+}
+
+article {
+  max-width: 576px;
+  margin: 0 auto;
+  padding: 2rem;
+  overflow-wrap: break-word;
+  background-color: #edebeb;
+  border-radius: 20px;
+  overflow:hidden;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  
+
+}
+  </style>
+  <body onload="start()" style="background-color:white">
+    <div style="text-align:center">
+  <label style="font-family:'Red Hat Text'; font-size:30px;"><b>Edit and Delete Articles</b></label>
+
+    </div>
+  <main>
+      
+    <label id="articles"></label>
+  </main>
+  <script>
+    var faunadb = window.faunadb
+  var q = faunadb.query
+  var client = new faunadb.Client({
+    secret: 'fnAEYeffB0AAyNqhrMHuazXpA_qOwFc5nMAZ7U53',
+    domain: 'db.eu.fauna.com',
+    scheme: 'https',
+  })
+
+function start(){
+
+let result = ""
+let amount = 0
+
+client.query(
+   q.Map(
+  q.Paginate(q.Documents(q.Collection('falcon-posts'))),
+  q.Lambda(x => q.Get(x))
+)).then (function(x){
+
+ for (var i = x.data.length - 1; i >= 0; i--) {
+     
+         amount = amount + 1
+         result = result + "<article><header><label style=\"font-family:'Bebas Neue'; font-size:40px\">" + x.data[i].data.titlereal + "</label><br><br><img id=\"" + x.data[i].data.title + "\" onerror=\"document.getElementById('" + x.data[i].data.title + "').src='" + "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/200px-Question_mark_%28black%29.svg.png" + "'\" style=\"width:100px; height:100px; vertical-align:middle; margin-right:10px; float:left\" src=\"" + x.data[i].data.cover + "\"></div><label style=\"margin:left:100px; vertical-align:middle;\">" + x.data[i].data.contents.split("linebreak")[0] + "<br><b>" + "<a href=\"" + "https://falcon-news.netlify.app/article.html?" + x.data[i].data.title + "\">Read more</a></b></label><br><br><br><textarea id=\"text" + x.data[i].ref.id + "\" style=\"width:550px; height:750px\">" + "RAW DATA\n===============\n\nRef ID: " + x.data[i].ref.id + "\n :URL: " + x.data[i].data.title + " :URL: \n :Cover Image: " + x.data[i].data.cover + " :Cover Image: \n :Title: " + x.data[i].data.titlereal + " :Title: \n\nRAW ARTICLE DATA\n===============\n\n :ARTICLE: " + x.data[i].data.contents.replace(/linebreak/g, "\n") + " :ARTICLE: " + "</textarea><br><br><button id=\"" + x.data[i].ref.id + "\" onclick=\"updatearticle(this)\">Save Changes</button><br><br><button id=\"article" + x.data[i].ref.id + "\" onclick=\"deletearticle(this)\">Delete Post</button></header></article><br><br>"
+         
+
+
+     }
+
+
+ 
+
+ if(amount < 2 && amount > 0)
+ {
+    amount = amount + " article"
+ }
+ else{
+
+amount = amount + " articles"
+ }
+document.getElementById("articles").innerHTML = "<div style=\"text-align:center\"><label style=\"font-family:'Red Hat Text'; font-size:20px;\"><b>Current articles: " + amount + "</b></label></div><br>" + result
+                                   
+      })
+    
+
+
+    
+}
+
+function updatearticle(button){
+
+client.query(
+  q.Update(
+    q.Ref(q.Collection('falcon-posts'), button.id),
+    {
+      data: {
+        title:  document.getElementById("text" + button.id).value.split(" :URL: ")[1],
+        cover:  document.getElementById("text" + button.id).value.split(" :Cover Image: ")[1],
+        titlereal:  document.getElementById("text" + button.id).value.split(" :Title: ")[1],
+        contents: document.getElementById("text" + button.id).value.split(" :ARTICLE: ")[1].replace(/\n/g ,"linebreak")
+      },
+    },
+  )
+)
+.then(function(ret){
+     
+     alert("Updated Successfully. The page will now reload to show any updates.")  
+     location.reload();
+    
+    
+  })
+.catch((err) => console.log('Error: %s', err)) 
+
+}
+
+function deletearticle(button){
+client.query(
+  q.Delete(q.Ref(q.Collection('falcon-posts'), button.id.replace(/article/g, "")))
+)
+.then(function(ret){ 
+
+      alert("Updated Successfully. The page will now reload to show any updates.")  
+     location.reload();
+
+ })
+.catch((err) => console.error('Error: %s', err))
+
+}
+</script>
+
+</body>
+
+</html>
